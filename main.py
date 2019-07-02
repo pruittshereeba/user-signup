@@ -6,7 +6,7 @@ app=Flask(__name__)
 app.config['DEBUG']=True
 
 
-def validate(form-input):
+def validate(form_input):
     form_value = form_input
     error = ''
     if not form_input:
