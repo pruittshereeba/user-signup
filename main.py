@@ -6,18 +6,6 @@ app=Flask(__name__)
 app.config['DEBUG']=True
 
 
-def validate(form_input):
-    form_value = form_input
-    error = ''
-    if not form_input:
-        error = "Please enter a {name} ..."
-
-    elif len(form_value) < 3 or len(form_value) > 20:
-        error = "Please enter something between (3-20) characters"
-
-    elif " " in form_value:
-        error = "Enter {name} without spaces please!"
-    return error
 
 
 
