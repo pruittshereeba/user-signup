@@ -56,7 +56,7 @@ def index():
         if (not username_error) and (not password_error) and (not verify_password_error) and (not email_error):
             return redirect('/confirmation?username={0}'.format(username))
 
-    return render_template('new_user_signup.html', title=title, username=username, email=email,
+    return render_template('signup-page.html', title=title, username=username, email=email,
                            username_error=username_error, password_error=password_error,
                            verify_password_error=verify_password_error, email_error=email_error)
 
@@ -65,7 +65,7 @@ def index():
 def confirmation():
     title = "Welcome!"
     username = request.args.get('username')
-    return render_template('confirmation.html', title=title, username=username)
+    return render_template('welcome.html', title=title, username=username)
 
 
 if __name__ == '__main__':
