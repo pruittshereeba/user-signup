@@ -1,62 +1,72 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, redirect, render_template
 import re
 
-app=Flask(__name__)
+app = Flask(__name__)
+app.config['DEBUG'] = True
 
-app.config['DEBUG']=True
+@app.route('/', methods=['POST', 'GET'])
+def index():
+
+    username = ''
+    email = ''
+    username_error = ''
+    password_error = ''
+    verify_password_error = ''
+    email_error = ''
+    title = 'Signup'
+
+    if request.method == 'POST':
+
+        username = request.form['username']
+        password = request.form['password']
+        verify_password = request.form['verify_password']
+        email = request.form['email']
+
+        for i in username:
+            #if there is a blank space in username, it's invalid
+            if i.isspace():
+                username_error = 'Username cannot contain spaces.'
+                username = ''
+            else:
+                #if username has fewer than 3 or greater than 20 characters, it's invalid
+                if (len(username) < 3) or (len(username) > 20):
+                    username_error = 'Username needs to be 3-20 characters.'
+                    username = ''
+
+        if not username:
+            username_error = 'Not a valid username'
+            username = ''
+
+        for i in password:
+            if i.isspace():
+                password_error = 'Password must not contain spaces.'
+            else:
+                if (len(password) < 3) or (len(password) > 20):
+                    password_error = 'Password must be 3-20 characters and not contain spaces.'
+        if not len(password):
+            password_error = 'Not a valid password'
+
+        if password != verify_password:
+            verify_password_error = 'Passwords do not match.'
+
+        if (email != '') and (not re.match('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email)):
+            email_error = 'This is not a valid email.'
+            email = ''
+
+        if (not username_error) and (not password_error) and (not verify_password_error) and (not email_error):
+            return redirect('/confirmation?username={0}'.format(username))
+
+    return render_template('new_user_signup.html', title=title, username=username, email=email,
+                           username_error=username_error, password_error=password_error,
+                           verify_password_error=verify_password_error, email_error=email_error)
 
 
+@app.route('/confirmation')
+def confirmation():
+    title = "Welcome!"
+    username = request.args.get('username')
+    return render_template('confirmation.html', title=title, username=username)
 
 
-
-
-
-    @app.route('/', methods=['POST','GET'])
-    def home_screen():
-        if request.method == 'POST':
-            user_name = request.form['user_name']
-            password = request.form['password']
-            verify_password = request.form['verify_password']
-            email = request.form['email']
-            
-            user_name_error=""
-            password_error=""
-            verify_pass_error=""
-            compare_pass_error=""
-            email_error=""
-
-            user_name_error= validate(user_name).format(name="Username")
-            password_error = validate(password).format(name="Password")
-            verify_pass_error = validate(verify_password).format(name="Verify Password")
-
-            #compares password to verify password
-            if verify_password not in password:
-                compare_pass_error="Sorry, those don't match, try again please!"
-            #check email input
-            if email:
-                if not re.search(r"([a-z]+[@]+[a-z]+[.]+[a-z])", email):
-                    email_error="Please enter a valid email address: "
-                else:
-                    email_error = validate(email).format(name="Email")
-            if not (user_name_error or
-                    password_error or
-                    verify_pass_error or
-                    compare_pass_error or
-                    email_error
-                    ):
-                    return redirect('welcome?user_name={0}'.format(user_name))
-            return render_template('signup-page.html',
-                                    user_name_error=user_name_error,
-                                    password_error=password_error,
-                                    verify_pass_error=verify_pass_error,
-                                    compare_pass_error=compare_pass_error,
-                                    email_error=email_error,
-                                    user_name=user_name,
-                                )
-        return render_template('signup-page.html', title="User Sign Up Page")
-@app.route('/welcome')
-def welcome_user():
-    user_name=request.args.get('user_name')
-    return render_template('welcome.html', user_name=user_name)
-
+if __name__ == '__main__':
 app.run()
