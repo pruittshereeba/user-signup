@@ -13,7 +13,7 @@ def index():
     password_error = ''
     verify_password_error = ''
     email_error = ''
-    title = 'Signup'
+    title = 'signup-page.html'
 
     if request.method == 'POST':
 
