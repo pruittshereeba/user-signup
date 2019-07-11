@@ -61,8 +61,8 @@ def index():
                            verify_password_error=verify_password_error, email_error=email_error)
 
 
-@app.route('/confirmation')
-def confirmation():
+@app.route('/welcome.html')
+def welcome():
     title = "Welcome!"
     username = request.args.get('username')
     return render_template('welcome.html', title=title, username=username)
