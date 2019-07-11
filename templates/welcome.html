@@ -1,5 +1,19 @@
-{% extends "base.html" %} {% block content %}
-
-<h1>Welcome, {{ username }}!</h1>
-
-{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      body {
+        background-color: #337ab7;
+      }
+      h2 {
+        margin-left: 40px;
+        color: #fff;
+      }
+    </style>
+    <title>Welcome, {{username}}!</title>
+  </head>
+  <body>
+    <h2>Welcome, {{username}}!</h2>
+  </body>
+</html>
