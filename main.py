@@ -1,11 +1,16 @@
 from flask import Flask, request, redirect, render_template
-import re
+import jinja2
+import cgi
+import os
+
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    return render_template('signup-page.html', title="Sign up")
+
 
     username = ''
     email = ''
@@ -17,23 +22,23 @@ def index():
 
     if request.method == 'POST':
 
-        username = request.form['username']
-        password = request.form['password']
-        verify_password = request.form['verify_password']
-        email = request.form['email']
+        username = request.form('username')
+        password = request.form('password')
+        verify_password = request.form('verify_password')
+        email = request.form('email')
 
         for i in username:
-            #if there is a blank space in username, it's invalid
+         #if there is a blank space in username, it's invalid
             if i.isspace():
                 username_error = 'Username cannot contain spaces.'
                 username = ''
-            else:
-                #if username has fewer than 3 or greater than 20 characters, it's invalid
-                if (len(username) < 3) or (len(username) > 20):
-                    username_error = 'Username needs to be 3-20 characters.'
-                    username = ''
+        else:
+            #if username has fewer than 3 or greater than 20 characters, it's invalid
+            if (len(username) < 3) or (len(username) > 20):
+                username_error = 'Username needs to be 3-20 characters.'
+                username = ''
 
-        if not username:
+        if not len(username):
             username_error = 'Not a valid username'
             username = ''
 
@@ -53,18 +58,19 @@ def index():
             email_error = 'This is not a valid email.'
             email = ''
 
-        if (not username_error) and (not password_error) and (not verify_password_error) and (not email_error):
-            return redirect('/confirmation?username={0}'.format(username))
+        if not username_error and not password_error and not verify_password_error and not email_error:
+            username = request.form['username']
+            return redirect('/welcome?username={0}'.format(username))
+        else:
+            return render_template('signup-page.html', title=title, username=username, email=email,
+                username_error=username_error, password_error=password_error,
+                verify_password_error=verify_password_error, email_error=email_error)
 
-    return render_template('signup-page.html', title=title, username=username, email=email,
-                           username_error=username_error, password_error=password_error,
-                           verify_password_error=verify_password_error, email_error=email_error)
 
-
-@app.route('/welcome.html')
+@app.route('/welcome.html', methods=['GET', 'POST'])
 def welcome():
     title = "Welcome!"
-    username = request.args.get('username')
+    username = request.form['username']
     return render_template('welcome.html', title=title, username=username)
 
 
