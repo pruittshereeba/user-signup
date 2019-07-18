@@ -48,35 +48,30 @@ def register():
 
 
     if len(username) < 3 or len(username) > 20:
-        username_error = 'Please enter a username between 3 and 20 characters.'
+        username_error = "Please enter a username between 3 and 20 characters."
         username = ''
-        username_error = ''
 
     if username.count(space) != 0:
-        username_error = 'Please enter a username between 3 and 20 characters.'
-        username= ''
-        username_error = ''         
+        username_error = "Please enter a username between 3 and 20 characters."
+        username= ''        
 
     if len(password) < 3 or len(password) > 20:
         password_error = "Please enter a password between 3 and 20 characters."
         password = ''
-        verify_password = ''
 
     if password.count(space) != 0:
         password_error = "Password cannot contain spaces."
         password = ''
-        verify_password = ''
 
     if verify_password != password:
-        verify_password_error = 'Passwords do not match.'
-        password = ''
+        verify_password_error = "Passwords do not match."
         verify_password = ''
 
     if len(email) != 0:
         if is_valid_email(email) == False:
             email_error = "Please enter a valid email."
-            password = ''
-            verify_password = ''
+            email = ''
+            
     if not username_error and not password_error and not verify_password_error and not email_error:
         username = request.form['username']
         return redirect('/welcome?username={}'.format(username))
