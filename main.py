@@ -5,9 +5,11 @@ import os
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
+
 @app.route("/")
 def index():
-    return render_template('signup-page.html', title="Sign-Up Form")
+    return render_template('signup-page.html', username=username, password=password, verify_password=verify_password, 
+    email=email)
 
 
 def is_valid_email(email):
@@ -71,12 +73,13 @@ def register():
         if is_valid_email(email) == False:
             email_error = "Please enter a valid email."
             email = ''
-            
+
     if not username_error and not password_error and not verify_password_error and not email_error:
         username = request.form['username']
         return redirect('/welcome?username={}'.format(username))
+
     else:
-        return render_template('signup-page.html', title="Sign-up Page", username=username, email=email,
+        return render_template('/signup-page.html', title="Sign-up Page", username=username, email=email,
             username_error=username_error, password_error=password_error,
             verify_password_error=verify_password_error, email_error=email_error)
 
