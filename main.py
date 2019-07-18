@@ -1,78 +1,95 @@
 from flask import Flask, request, redirect, render_template
-import jinja2
 import cgi
 import os
-
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route("/")
 def index():
-    return render_template('signup-page.html', title="Sign up")
+    return render_template('register.html', title="Registration Form")
 
 
-    username = ''
-    email = ''
+def is_valid_email(address):
+    if len(address) < 3 or len(address) > 20:
+        return False
+
+    at = "@"
+    at_count = address.count(at)
+    if at_count != 1:
+        return False
+
+    period = "."
+    period_count = address.count(period)
+    if period_count != 1:
+        return False
+
+    space = " "
+    space_count = address.count(space)
+    if space_count != 0:
+        return False
+
+    else:
+        return True
+
+@app.route("/signup-page", methods=['POST'])
+def register():
+
+    username = request.form['username']
+    password = request.form['password']
+    verify_password = request.form['verify_password']
+    email = request.form['email']
+
     username_error = ''
     password_error = ''
     verify_password_error = ''
     email_error = ''
-    title = 'signup-page.html'
+    space = ' '
 
-    if request.method == 'POST':
 
-        username = request.form('username')
-        password = request.form('password')
-        verify_password = request.form('verify_password')
-        email = request.form('email')
+    if len(username) < 3 or len(username) > 20:
+        username_error = 'Please enter a username between 3 and 20 characters.'
+        username = ''
+        username_error = ''
 
-        for i in username:
-         #if there is a blank space in username, it's invalid
-            if i.isspace():
-                username_error = 'Username cannot contain spaces.'
-                username = ''
-        else:
-            #if username has fewer than 3 or greater than 20 characters, it's invalid
-            if (len(username) < 3) or (len(username) > 20):
-                username_error = 'Username needs to be 3-20 characters.'
-                username = ''
+    if username.count(space) != 0:
+        username_error = 'Please enter a username between 3 and 20 characters.'
+        username= ''
+        username_error = ''         
 
-        if not len(username):
-            username_error = 'Not a valid username'
-            username = ''
+    if len(password) < 3 or len(password) > 20:
+        password_error = "Please enter a password between 3 and 20 characters."
+        password = ''
+        verify_password = ''
 
-        for i in password:
-            if i.isspace():
-                password_error = 'Password must not contain spaces.'
-            else:
-                if (len(password) < 3) or (len(password) > 20):
-                    password_error = 'Password must be 3-20 characters and not contain spaces.'
-        if not len(password):
-            password_error = 'Not a valid password'
+    if password.count(space) != 0:
+        password_error = "Password cannot contain spaces."
+        password = ''
+        verify_password = ''
 
-        if password != verify_password:
-            verify_password_error = 'Passwords do not match.'
+    if verify_password != password:
+        verify_password_error = 'Passwords do not match.'
+        password = ''
+        verify_password = ''
 
-        if (email != '') and (not re.match('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email)):
-            email_error = 'This is not a valid email.'
-            email = ''
-
-        if not username_error and not password_error and not verify_password_error and not email_error:
-            username = request.form['username']
-            return redirect('/welcome?username={0}'.format(username))
-        else:
-            return render_template('signup-page.html', title=title, username=username, email=email,
-                username_error=username_error, password_error=password_error,
-                verify_password_error=verify_password_error, email_error=email_error)
-
+    if len(email) != 0:
+        if is_valid_email(email) == False:
+            email_error = "Please enter a valid email."
+            password = ''
+            verify_password = ''
+    if not username_error and not password_error and not verify_password_error and not email_error:
+        username = request.form['username']
+        return redirect('/welcome?username={0}'.format(username))
+    else:
+        return render_template('signup-page.html', title="Sign-up Page", username=username, email=email,
+            username_error=username_error, password_error=password_error,
+            verify_password_error=verify_password_error, email_error=email_error)
 
 @app.route('/welcome.html', methods=['GET', 'POST'])
 def welcome():
     title = "Welcome!"
-    username = request.form['username']
-    return render_template('welcome.html', title=title, username=username)
+    username = request.args.get('username')
+    return render_template('welcome.html', title="Success", username=username)
 
 
-if __name__ == '__main__':
     app.run()
