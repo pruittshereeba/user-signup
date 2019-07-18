@@ -7,32 +7,32 @@ app.config['DEBUG'] = True
 
 @app.route("/")
 def index():
-    return render_template('register.html', title="Registration Form")
+    return render_template('signup-page.html', title="Sign-Up Form")
 
 
-def is_valid_email(address):
-    if len(address) < 3 or len(address) > 20:
+def is_valid_email(email):
+    if len(email) < 3 or len(email) > 20:
         return False
 
     at = "@"
-    at_count = address.count(at)
+    at_count = email.count(at)
     if at_count != 1:
         return False
 
     period = "."
-    period_count = address.count(period)
+    period_count = email.count(period)
     if period_count != 1:
         return False
 
     space = " "
-    space_count = address.count(space)
+    space_count = email.count(space)
     if space_count != 0:
         return False
 
     else:
         return True
 
-@app.route("/signup-page", methods=['POST'])
+@app.route("/signup-page.html", methods=['POST', 'GET'])
 def register():
 
     username = request.form['username']
@@ -79,7 +79,7 @@ def register():
             verify_password = ''
     if not username_error and not password_error and not verify_password_error and not email_error:
         username = request.form['username']
-        return redirect('/welcome?username={0}'.format(username))
+        return redirect('/welcome?username={}'.format(username))
     else:
         return render_template('signup-page.html', title="Sign-up Page", username=username, email=email,
             username_error=username_error, password_error=password_error,
@@ -92,4 +92,4 @@ def welcome():
     return render_template('welcome.html', title="Success", username=username)
 
 
-    app.run()
+app.run()
