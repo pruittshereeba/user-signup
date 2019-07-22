@@ -1,49 +1,47 @@
-<div class='container-fluid'>
-	<div class='row'>
-		<div class='col-md-3'>
+<!DOCTYPE html>
+<html>
+	<body>
+		<div>
+			<div class="row">
+		<div>
 		</div>
-		<div class='col-md-6'>
-			<div class='form-box'>
+		<div class="col-md-6">
+			<div class="form-box">
 				<h1>New User Signup</h1>
-				<form action='welcome.html' method='POST'>
-					<table class='table'>
+				<form method="POST">
+					<table class="table">
 						<tbody>
-							<tr class='form-group'>
-								<td><label for='username'>Username: </label></td>
-								<td><input type=' text' class='form-control' name='username' id='username' placeholder='username'
-										value={{username}}></td>
+							<tr>
+								<td><label form="user_name">Username: </label></td>
+								<td><input type="text" name="user_name" value="{{name}}"></td>
 								<td>
-									<p class='error'>{{username_error}}</p>
+									<p class="error">{{username_error}}</p>
 								</td>
 							</tr>
-							<tr class='form-group'>
-								<td><label for='password'>Password: </label></td>
-								<td><input type='password' class='form-control' name='password' id='password'
-										placeholder='••••••••'></td>
+							<tr>
+								<td><label form="password">Password: </label></td>
+								<td><input type="password" name="password" value="{{password}}"></td>
 								<td>
-									<p class='error'>{{password_error}}</p>
+									<p class="error">{{password_error}}</p>
 								</td>
 							</tr>
-							<tr class='form-group'>
-								<td><label for='verify'>Verify Password: </label></td>
-								<td><input type='password' class='form-control' name='verify' id='verify'
-										placeholder='••••••••'></td>
+							<tr>
+								<td><label form="verify">Verify Password: </label></td>
+								<td><input type="password" name="verify" value="{{verify_password}}"></td>
 								<td>
-									<p class='error'>{{verify_password_error}}</p>
+									<p class="error">{{verify_password_error}}</p>
 								</td>
 							</tr>
-							<tr class='form-group'>
-								<td><label for='email'>Email (optional): </label></td>
-								<td><input type='text' class='form-control' name='email' id='email'
-										placeholder='you@yourdomain.com' value={{email}}></td>
+							<tr>
+								<td><label form="email">Email (optional): </label></td>
+								<td><input type="text" name="email" value="{{email}}"></td>
 								<td>
-									<p class='error'>{{email_error}}</p>
+									<p class="error">{{email_error}}</p>
 								</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td><input type='submit' name='submit' id='submit' class='btn btn-primary'
-										value='Submit'></input></td>
+								<td><input type="submit" name="submit" value="{{Submit}}"></input></td>
 								<td></td>
 							</tr>
 						</tbody>
@@ -51,7 +49,8 @@
 				</form>
 			</div>
 		</div>
-		<div class='col-md-3'>
+		<div>
 		</div>
 	</div>
 </div>
+</html>
