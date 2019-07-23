@@ -34,19 +34,19 @@ def register():
             user_name = ''
         
 
-        elif len(password) < 3 or len(password) > 20 or password == 0:
+        if len(password) < 3 or len(password) > 20 or password == 0:
             password_error = "Please enter a password between 3 and 20 characters/password cannot contain spaces."
             password = ''
 
-        elif verify_password != password:
+        if verify_password != password:
             verify_password_error = "Passwords do not match."
             verify_password = ''
 
-        elif len(email) < 3 or len(email) > 20 and "@" or "." not in (email):
+        if len(email) < 3 or len(email) > 20 and "@" or "." not in (email):
             email_error = "Please enter a valid email address. "
             email = ''
             
-        elif not username_error and not password_error and not verify_password_error and not email_error:
+        if not username_error and not password_error and not verify_password_error and not email_error:
             user_name = request.form['user_name']
             return redirect('/welcome?user_name={0}'.format(user_name))
 
